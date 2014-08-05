@@ -49,4 +49,38 @@ defmodule ClutchSolutions do
     Enum.reduce int_array, 0, &+/2
   end
 
+
+  @doc """
+  Use common dict /usr/share/dict/words or another file
+  Find and print the first 20 words that are anagrams of each other
+
+  iex> ClutchSolutions.anagrams
+  """
+  def anagrams(file \\ "/usr/share/dict/words") do
+    File.stream!(file)
+    |> Enum.map(&String.strip/1)
+    |> Enum.reduce(%{}, fn word, words ->
+      Map.update(words, Enum.sort(String.graphemes(word)),
+        [word], &[word | &1])
+    end)
+    |> Enum.map(&elem(&1, 1))
+    |> Enum.slice 1..20
+  end
+  
+
+  @doc """
+  Use common dict /use/share/dict/words for another file
+
+  Find the first 20 palindromes of more than 3 characters
+
+  iex> ClutchSolutions.palindromes
+  """
+  def palindromes(file \\ "/usr/share/dict/words") do
+    words = File.stream!(file)
+    reverse_words = File.stream!(file)
+    |> Enum.map(&String.strip/1)
+    |> Enum.filter(&Enum.count(String.graphemes(&1)) > 2)
+    |> Enum.map &String.reverse/1
+  end
+
 end
