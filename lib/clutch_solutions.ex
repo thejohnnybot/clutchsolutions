@@ -54,19 +54,21 @@ defmodule ClutchSolutions do
   Use common dict /usr/share/dict/words or another file
   Find and print the first 20 words that are anagrams of each other
 
+  Credit to chrismccord for figuring it out in elixir irc
+
   iex> ClutchSolutions.anagrams
   """
   def anagrams(file \\ "/usr/share/dict/words") do
-    File.stream!(file)
-    |> Enum.map(&String.strip/1)
-    |> Enum.reduce(%{}, fn word, words ->
-      Map.update(words, Enum.sort(String.graphemes(word)),
-        [word], &[word | &1])
+    file
+    |> File.stream!
+    |> Stream.map(&String.strip/1)
+    |> Stream.map(&{String.graphemes(&1) |> Enum.sort |> Enum.join(""), &1})
+    |> Enum.reduce(HashDict.new, fn {key, word}, words ->
+      HashDict.update(words, key, [], &[word | &1])
     end)
-    |> Enum.map(&elem(&1, 1))
+    |> Enum.filter(fn {_key, words} -> Enum.count(words) > 1 end)
     |> Enum.slice 1..20
-  end
-  
+  end 
 
   @doc """
   Use common dict /use/share/dict/words for another file

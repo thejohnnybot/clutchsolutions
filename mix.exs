@@ -4,7 +4,7 @@ defmodule ClutchSolutions.Mixfile do
   def project do
     [app: :clutch_solutions,
      version: "0.0.1",
-     elixir: "~> 0.14.3",
+     elixir: "~> 0.15.0",
      deps: deps]
   end
 
