@@ -9,5 +9,5 @@ Some programming exercises written in elixir as I learn elixir
 
 * Fizzbuzz 
 * Power and Sum of Result
-* Word Anagrams (doneish)
-* Palindromes (not done)
+* Word Anagrams
+* Palindromes (doneish)
