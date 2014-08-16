@@ -62,12 +62,16 @@ defmodule ClutchSolutions do
     file
     |> File.stream!
     |> Stream.map(&String.strip/1)
-    |> Stream.map(&{String.graphemes(&1) |> Enum.sort |> Enum.join(""), &1})
-    |> Enum.reduce(HashDict.new, fn {key, word}, words ->
+    #|> Stream.map(&{String.graphemes(&1) |> Enum.sort |> Enum.join(""), &1})
+    #|> Enum.reduce(HashDict.new, fn {key, word}, words ->
+      #HashDict.update(words, key, [], &[word | &1])
+    #end)
+    |> Enum.reduce(HashDict.new, fn word, words ->
+      key = String.graphemes(word) |> Enum.sort |> Enum.join("")
       HashDict.update(words, key, [], &[word | &1])
     end)
-    |> Enum.filter(fn {_key, words} -> Enum.count(words) > 1 end)
-    |> Enum.slice 1..20
+    |> Stream.filter(fn {_key, words} -> Enum.count(words) > 1 end)
+    |> Enum.take(20)
   end 
 
   @doc """
@@ -87,7 +91,7 @@ defmodule ClutchSolutions do
         IO.inspect word
       end
     end)
-    |> Enum.slice(1..20)
+    |> Enum.take(20)
   end
 
 end
