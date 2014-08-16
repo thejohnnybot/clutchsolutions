@@ -78,11 +78,14 @@ defmodule ClutchSolutions do
   iex> ClutchSolutions.palindromes
   """
   def palindromes(file \\ "/usr/share/dict/words") do
-    words = File.stream!(file)
-    reverse_words = File.stream!(file)
-    |> Enum.map(&String.strip/1)
-    |> Enum.filter(&Enum.count(String.graphemes(&1)) > 2)
-    |> Enum.map &String.reverse/1
+    file
+    |> File.stream!
+    |> Stream.map(&String.strip/1)
+    |> Enum.filter( fn word -> 
+      if word == String.reverse(word) do
+        IO.inspect word
+      end
+    end)
   end
 
 end
