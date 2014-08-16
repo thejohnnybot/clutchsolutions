@@ -81,11 +81,13 @@ defmodule ClutchSolutions do
     file
     |> File.stream!
     |> Stream.map(&String.strip/1)
+    |> Enum.filter(&(String.length(&1) > 2))
     |> Enum.filter( fn word -> 
       if word == String.reverse(word) do
         IO.inspect word
       end
     end)
+    |> Enum.slice(1..20)
   end
 
 end
